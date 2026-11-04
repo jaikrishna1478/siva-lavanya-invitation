@@ -1,11 +1,16 @@
 {
   "hosting": {
-    "public": ".",
+    "public": "y",
     "ignore": [
       "firebase.json",
-      "README.md",
       "**/.*",
       "**/node_modules/**"
+    ],
+    "rewrites": [
+      {
+        "source": "**",
+        "destination": "/index.html"
+      }
     ]
   }
 }
