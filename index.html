@@ -1,0 +1,740 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Siva Krishna & Lavanya - Wedding Invitation</title>
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Google Fonts including Noto Sans Telugu -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400;1,600&family=Montserrat:wght@400;500;600;700&family=Noto+Sans+Telugu:wght@400;500;600;700&family=Playfair+Display:ital,wght@0,500;0,600;0,700;1,500;1,600&display=swap" rel="stylesheet">
+    
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    
+    <!-- GSAP for Animations -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+
+    <!-- Canvas Confetti for Sparkle Effects -->
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            rose: '#E6C9C9',     
+                            blush: '#F4E4E4',    
+                            gold: '#C5A880',     
+                            sage: '#8B9A8C',     
+                            charcoal: '#2D2D2D', 
+                            ivory: '#FAF8F5'     
+                        }
+                    },
+                    fontFamily: {
+                        'serif': ['"Cormorant Garamond"', 'serif'],
+                        'sans': ['Montserrat', '"Noto Sans Telugu"', 'sans-serif'],
+                        'display': ['"Playfair Display"', 'serif'],
+                        'telugu': ['"Noto Sans Telugu"', 'sans-serif']
+                    },
+                    backgroundImage: {
+                        'floral-pattern': "url('https://www.transparenttextures.com/patterns/floral-motif.png')",
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        html {
+            overflow-x: clip;
+        }
+
+        /* Custom Animations */
+        @keyframes float {
+            0% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(-10px) rotate(2deg); }
+            100% { transform: translateY(0px) rotate(0deg); }
+        }
+        
+        @keyframes pulse-slow {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.8; transform: scale(1.05); }
+        }
+
+        @keyframes shine {
+            100% { transform: translateX(200%); }
+        }
+
+        .animate-float {
+            animation: float 6s ease-in-out infinite;
+        }
+
+        .animate-pulse-slow {
+            animation: pulse-slow 3s ease-in-out infinite;
+        }
+
+        .animate-shine {
+            animation: shine 2s infinite;
+        }
+
+        /* Hide scrollbar but keep functionality */
+        .no-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+        .no-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+
+        /* Arch Image Container */
+        .arch-image {
+            border-radius: 10rem 10rem 0.5rem 0.5rem;
+            overflow: hidden;
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+            position: relative;
+            transition: all 0.5s ease;
+        }
+        
+        .arch-image:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 25px 30px -5px rgba(197, 168, 128, 0.3), 0 15px 15px -5px rgba(197, 168, 128, 0.2);
+        }
+
+        .gallery-image-wrapper {
+            overflow: hidden;
+            border-radius: 0.75rem;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+            position: relative;
+        }
+
+        .gallery-grid {
+            display: grid;
+            grid-template-columns: minmax(0, 2fr) minmax(0, 1fr);
+            align-items: start;
+            gap: 0.75rem;
+        }
+        
+        .gallery-image-wrapper {
+            min-width: 0;
+        }
+
+        .gallery-side-stack {
+            display: grid;
+            align-content: start;
+            gap: 0.75rem;
+        }
+
+        .gallery-image-wrapper img {
+            display: block;
+            width: 100%;
+            height: auto;
+            transition: transform 0.7s ease;
+        }
+
+        @media (min-width: 768px) {
+            .gallery-large {
+                grid-column: 1;
+                grid-row: 1;
+            }
+
+            .gallery-side-stack {
+                grid-column: 2;
+                grid-row: 1;
+            }
+        }
+
+        @media (max-width: 767px) {
+            .gallery-grid {
+                grid-template-columns: minmax(0, 1fr);
+            }
+        }
+        
+        .gallery-image-wrapper:hover img {
+            transform: scale(1.08);
+        }
+
+        .countdown-box {
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(8px);
+            border: 1px solid rgba(197, 168, 128, 0.5);
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+        }
+
+        /* Language Switcher Button */
+        #lang-switch {
+            backdrop-filter: blur(10px);
+            background: rgba(250, 248, 245, 0.9);
+            border: 1px solid rgba(197, 168, 128, 0.4);
+        }
+    </style>
+</head>
+<body class="bg-brand-ivory text-brand-charcoal font-sans antialiased overflow-x-hidden selection:bg-brand-rose selection:text-brand-charcoal">
+
+    <!-- Language Switcher (Fixed Top Right) -->
+    <button id="lang-switch" onclick="toggleLanguage()" class="fixed top-6 right-6 z-50 px-4 py-2 rounded-full shadow-lg flex items-center space-x-2 text-brand-charcoal hover:bg-brand-gold hover:text-white transition-all duration-300 font-medium text-sm group">
+        <i data-lucide="languages" class="w-4 h-4 text-brand-gold group-hover:text-white transition-colors"></i>
+        <span id="lang-text" class="tracking-wide">తెలుగు</span>
+    </button>
+
+    <!-- Loading Screen -->
+    <div id="loader" class="fixed inset-0 z-[60] bg-brand-ivory flex items-center justify-center transition-opacity duration-700">
+        <div class="text-center">
+            <h2 class="font-display italic text-4xl text-brand-gold animate-pulse font-semibold">S & L</h2>
+            <p data-i18n="loading" class="font-sans text-sm font-semibold uppercase tracking-[0.3em] text-brand-sage mt-3">Loading...</p>
+        </div>
+    </div>
+
+    <!-- Global Website Border Decoration -->
+    <div class="fixed inset-2 md:inset-4 border border-brand-gold/40 pointer-events-none z-[45] rounded-xl"></div>
+    <div class="fixed inset-3 md:inset-5 border border-brand-gold/20 pointer-events-none z-[45] rounded-lg"></div>
+
+    <!-- Hero Section -->
+    <section id="home" class="relative min-h-[95vh] flex items-center justify-center overflow-hidden bg-brand-blush pt-20 pb-12">
+        <!-- Background Elements -->
+        <div class="absolute inset-0 bg-floral-pattern opacity-15 mix-blend-multiply"></div>
+        <div class="absolute inset-0 bg-gradient-to-b from-transparent to-brand-ivory"></div>
+        
+        <!-- Decorative SVG Top Left -->
+        <svg class="absolute top-10 left-6 md:left-12 w-24 h-24 md:w-32 md:h-32 opacity-60 animate-float" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+            <path fill="none" stroke="#C5A880" stroke-width="2" stroke-linecap="round" d="M10 90 Q 40 40, 90 10" />
+            <path fill="none" stroke="#8B9A8C" stroke-width="1.5" stroke-linecap="round" d="M30 70 Q 50 30, 80 20" />
+            <circle cx="90" cy="10" r="3" fill="#C5A880" />
+        </svg>
+
+        <!-- Decorative SVG Bottom Right -->
+        <svg class="absolute bottom-10 right-6 md:right-12 w-32 h-32 md:w-40 md:h-40 opacity-60 animate-float" style="animation-delay: -3s;" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+            <path fill="none" stroke="#C5A880" stroke-width="2" stroke-linecap="round" d="M90 90 Q 40 60, 10 10" />
+            <path fill="none" stroke="#8B9A8C" stroke-width="1.5" stroke-linecap="round" d="M70 80 Q 30 50, 20 20" />
+            <circle cx="10" cy="10" r="3" fill="#C5A880" />
+        </svg>
+
+        <!-- Elegant Hero Content -->
+        <div class="relative z-10 text-center px-4 max-w-4xl mx-auto flex flex-col items-center">
+            
+            <!-- Aesthetic Star Icon -->
+            <svg width="30" height="30" viewBox="0 0 100 100" class="mb-6 text-brand-gold animate-pulse-slow">
+                <path fill="currentColor" d="M50 0 C50 25 75 50 100 50 C75 50 50 75 50 100 C50 75 25 50 0 50 C25 50 50 25 50 0 Z" />
+            </svg>
+
+            <span data-i18n="hero_subtitle" class="gsap-hero-elem block font-sans text-xs md:text-sm font-bold uppercase tracking-[0.4em] text-brand-sage mb-6">Together with their families</span>
+            
+            <h1 class="gsap-hero-elem font-display text-6xl md:text-7xl lg:text-8xl font-bold text-brand-charcoal leading-tight mb-2 drop-shadow-sm">
+                <span data-i18n="groom_name_hero">Siva Krishna</span>
+                <span class="block font-serif italic font-semibold text-4xl md:text-5xl lg:text-6xl text-brand-gold my-3">&</span>
+                <span data-i18n="bride_name_hero">Lavanya</span>
+            </h1>
+            
+            <p data-i18n="hero_invite" class="gsap-hero-elem font-sans font-semibold text-brand-charcoal/80 text-sm md:text-base max-w-md mx-auto mt-8 mb-6 leading-relaxed">
+                Invite you to share in the joy of the beginning of their new life together.
+            </p>
+
+            <!-- Decorative Dots Divider -->
+            <div class="gsap-hero-elem flex justify-center mt-4 opacity-70">
+                <svg class="w-16 h-2 text-brand-gold" viewBox="0 0 100 20" fill="currentColor">
+                    <circle cx="50" cy="10" r="3" />
+                    <circle cx="30" cy="10" r="2" opacity="0.7"/>
+                    <circle cx="70" cy="10" r="2" opacity="0.7"/>
+                    <circle cx="10" cy="10" r="1.5" opacity="0.4"/>
+                    <circle cx="90" cy="10" r="1.5" opacity="0.4"/>
+                </svg>
+            </div>
+        </div>
+    </section>
+
+    <!-- Quote Section -->
+    <section class="py-12 md:py-16 bg-white relative">
+        <div class="container mx-auto px-6 max-w-4xl text-center gsap-fade-up">
+            <i data-lucide="quote" class="w-8 h-8 text-brand-gold/40 mx-auto mb-4"></i>
+            <h2 data-i18n="quote" class="font-serif italic text-2xl md:text-3xl font-semibold text-brand-charcoal leading-relaxed">
+                "Janakyah Kamalamalanjali Puteyah Padmaragayithah<br>
+                 Nyastha Ramava Masthakecha Nilavathkunda Thranunayithah!<br>
+                 Srastha Shyamala Kayakanthi Kalithah Ya Indra Neelayithah<br>
+                 Mukthastha Shubhadha Bhavanthu Bhavatham Srirama Vivaahikah!!"
+            </h2>
+        </div>
+    </section>
+
+    <!-- The Couple Section -->
+    <section id="couple" class="py-16 md:py-20 bg-brand-ivory relative">
+        <div class="container mx-auto px-6 max-w-5xl">
+            <div class="text-center mb-12 md:mb-16 gsap-fade-up">
+                <span data-i18n="us_subtitle" class="font-sans text-xs font-semibold uppercase tracking-[0.3em] text-brand-sage">About Us</span>
+                <h2 data-i18n="us_title" class="font-display font-bold text-4xl md:text-5xl text-brand-charcoal mt-2">The Happy Couple</h2>
+                <div class="w-16 h-[2px] bg-brand-gold mx-auto mt-4"></div>
+            </div>
+
+            <div class="grid md:grid-cols-2 gap-12 md:gap-20 items-center">
+                <!-- Groom -->
+                <div class="text-center flex flex-col items-center gsap-slide-right">
+                    <div class="arch-image w-56 h-72 md:w-72 md:h-[24rem] mb-6 border-[6px] border-white relative group">
+                        <!-- Groom Real Picture Frame (Cropped nicely via CSS object-position) -->
+                        <img src="public/groom.jpeg" alt="Siva Krishna" class="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-110">
+                        <div class="absolute inset-0 bg-brand-gold/10 group-hover:bg-transparent transition-colors duration-500"></div>
+                    </div>
+                    <h3 data-i18n="groom_name_hero" class="font-display font-bold text-3xl text-brand-charcoal mb-1">Siva Krishna</h3>
+                    <p data-i18n="groom_label" class="font-serif italic font-semibold text-brand-gold text-xl mb-2">The Groom</p>
+                    <p data-i18n="groom_parents" class="font-sans text-xs font-bold text-brand-sage uppercase tracking-wider mb-3">Son of Konathala Srinivasarao & Lakshmi Sarada Devi</p>
+                    <p data-i18n="groom_desc" class="font-sans text-sm font-medium text-brand-charcoal/80 max-w-xs mx-auto leading-relaxed">
+                        A kind-hearted soul with a passion for life. He can't wait to start this new beautiful chapter.
+                    </p>
+                </div>
+
+                <!-- Bride -->
+                <div class="text-center flex flex-col items-center gsap-slide-left">
+                     <div class="arch-image w-56 h-72 md:w-72 md:h-[24rem] mb-6 border-[6px] border-white relative group">
+                        <!-- Bride Real Picture Frame (Cropped nicely via CSS object-position) -->
+                        <img src="public/bride.jpeg" alt="Lavanya" class="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-110">
+                        <div class="absolute inset-0 bg-brand-rose/10 group-hover:bg-transparent transition-colors duration-500"></div>
+                    </div>
+                    <h3 data-i18n="bride_name_hero" class="font-display font-bold text-3xl text-brand-charcoal mb-1">Lavanya</h3>
+                    <p data-i18n="bride_label" class="font-serif italic font-semibold text-brand-gold text-xl mb-2">The Bride</p>
+                    <p data-i18n="bride_parents" class="font-sans text-xs font-bold text-brand-sage uppercase tracking-wider mb-3">Daughter of Peela Lakshmi Ganapathi & Lakshmi</p>
+                    <p data-i18n="bride_desc" class="font-sans text-sm font-medium text-brand-charcoal/80 max-w-xs mx-auto leading-relaxed">
+                        Brings joy to everyone around her and has found her perfect match in Siva.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Events Section -->
+    <section id="events" class="py-16 md:py-20 bg-white relative">
+        <div class="container mx-auto px-6 max-w-5xl">
+            <div class="text-center mb-12 md:mb-16 gsap-fade-up">
+                <span data-i18n="events_subtitle" class="font-sans text-xs font-semibold uppercase tracking-[0.3em] text-brand-sage">Celebrations</span>
+                <h2 data-i18n="events_title" class="font-display font-bold text-4xl md:text-5xl text-brand-charcoal mt-2">Wedding Events</h2>
+                <div class="w-16 h-[2px] bg-brand-gold mx-auto mt-4"></div>
+            </div>
+
+            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8 md:gap-12">
+                <!-- Engagement -->
+                <div class="gsap-event-card bg-brand-ivory p-8 md:p-10 rounded-2xl text-center border border-brand-gold/20 shadow-lg">
+                    <h3 data-i18n="event_1_name" class="font-display font-bold text-2xl text-brand-charcoal mb-2">Engagement</h3>
+                    <p data-i18n="event_1_date" class="font-serif italic font-semibold text-brand-gold text-xl mb-4">November 22, 2026</p>
+                    <p data-i18n="event_1_desc" class="font-sans text-sm font-medium text-brand-charcoal/80 leading-relaxed">Join us as we exchange rings and officially begin our journey towards forever.</p>
+                </div>
+
+                <!-- Wedding -->
+                <div class="gsap-event-card bg-brand-ivory p-8 md:p-10 rounded-2xl text-center border border-brand-gold/20 shadow-lg">
+                    <h3 data-i18n="event_2_name" class="font-display font-bold text-2xl text-brand-charcoal mb-2">Wedding Ceremony</h3>
+                    <!-- Secret Date to be updated by JS -->
+                    <p id="secret-wedding-date" data-i18n="secret_date" class="font-serif italic font-semibold text-brand-gold text-xl mb-4">🔒 To Be Revealed...</p>
+                    <p data-i18n="event_2_desc" class="font-sans text-sm font-medium text-brand-charcoal/80 leading-relaxed">Venue: KSR Function Hall, Paddala Venkamma Talli Temple, Nauduru Center, Veeravasaram Mandal</p>
+                </div>
+
+                <!-- Reception -->
+                <div class="gsap-event-card bg-brand-ivory p-8 md:p-10 rounded-2xl text-center border border-brand-gold/20 shadow-lg">
+                    <h3 data-i18n="event_3_name" class="font-display font-bold text-2xl text-brand-charcoal mb-2">Reception</h3>
+                    <p data-i18n="event_3_time" class="font-serif italic font-semibold text-brand-gold text-xl mb-4">6 PM onwards</p>
+                    <p data-i18n="event_3_desc" class="font-sans text-sm font-medium text-brand-charcoal/80 leading-relaxed">Venue: KSR Function Hall, Paddala Venkamma Talli Temple, Nauduru Center, Veeravasaram Mandal</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Gallery Section -->
+    <section id="gallery" class="py-16 md:py-20 bg-brand-ivory relative border-t border-brand-rose/20">
+        <div class="container mx-auto px-6 max-w-5xl">
+            <div class="text-center mb-12 md:mb-16 gsap-fade-up">
+                <span data-i18n="gallery_subtitle" class="font-sans text-xs font-semibold uppercase tracking-[0.3em] text-brand-sage">Glimpses</span>
+                <h2 data-i18n="gallery_title" class="font-display font-bold text-4xl md:text-5xl text-brand-charcoal mt-2">Our Memories</h2>
+                <div class="w-16 h-[2px] bg-brand-gold mx-auto mt-4"></div>
+            </div>
+
+            <!-- One large photo beside a vertical stack of smaller photos -->
+            <div class="gallery-grid">
+                <div class="gallery-image-wrapper gallery-large gsap-gallery-item">
+                    <img src="public/engement2.jpg" alt="Couple">
+                </div>
+                <div class="gallery-side-stack">
+                    <div class="gallery-image-wrapper gsap-gallery-item">
+                        <img src="public/engement.jpg" alt="Engagement">
+                    </div>
+                    <div class="gallery-image-wrapper gsap-gallery-item">
+                        <img src="public/IMG_7931.JPG.jpeg" alt="Bride Portrait">
+                    </div>
+                    <div class="gallery-image-wrapper gsap-gallery-item">
+                        <img src="public/IMG_7934.PNG" alt="Casual Portrait">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- Closing Quote Section -->
+    <section class="py-16 md:py-24 bg-white text-center relative z-10 border-t border-brand-rose/20">
+        <div class="container mx-auto px-6 max-w-2xl flex flex-col items-center gsap-fade-up">
+            <i data-lucide="heart-handshake" class="w-12 h-12 text-brand-gold mx-auto mb-6 opacity-80"></i>
+            <h3 data-i18n="closing_quote" class="font-serif italic text-2xl md:text-3xl text-brand-charcoal font-semibold leading-relaxed mb-8">
+                "వేద మంత్రాలతో పచ్చని పందిరిలో, ధర్మేచ, అర్దేచ, కామేచ, మోక్షేచ, నాతిచరామి అని పలికే శుభ ఘడియలలో మీ హృదయాక్షింతలు నూతన వధూవరులపై వేసి ఆశీర్వదించ కోరుచున్నాము."
+            </h3>
+        </div>
+    </section>
+
+    <!-- Reveal & Countdown Section -->
+    <section class="py-20 bg-brand-ivory text-center relative z-10 border-t border-brand-gold/20">
+        <div class="container mx-auto px-6 flex flex-col items-center">
+            <button id="reveal-btn" onclick="revealDate()" class="inline-block bg-brand-gold hover:bg-brand-sage text-white font-sans text-sm font-bold uppercase tracking-widest px-10 py-5 rounded-full shadow-[0_0_20px_rgba(197,168,128,0.6)] transition-all duration-500 hover:scale-105 hover:shadow-[0_0_30px_rgba(139,154,140,0.8)] relative overflow-hidden group mb-10">
+                <span class="relative z-10 flex items-center gap-2">
+                    <i data-lucide="sparkles" class="w-5 h-5"></i> 
+                    <span data-i18n="reveal_btn">Reveal the Date!</span>
+                </span>
+                <div class="absolute inset-0 bg-white/20 transform -skew-x-12 -translate-x-full group-hover:animate-shine z-0"></div>
+            </button>
+
+            <div id="revealed-date-container" class="hidden flex-col items-center justify-center mb-10">
+                <span data-i18n="reveal_text_pre" class="font-sans text-sm font-bold uppercase tracking-[0.3em] text-brand-sage mb-3">We are getting married on</span>
+                <h3 id="revealed-date" class="font-display font-bold text-4xl md:text-5xl lg:text-6xl text-brand-charcoal mb-10 text-shadow-sm">November 25, 2026</h3>
+                
+                <!-- Countdown -->
+                <div class="flex gap-3 md:gap-6 text-center" id="countdown-container">
+                    <div class="countdown-box rounded-xl p-4 md:p-6 w-16 md:w-24">
+                        <div id="days" class="font-display font-bold text-3xl md:text-4xl text-brand-charcoal">00</div>
+                        <div data-i18n="days" class="font-sans text-[10px] font-bold uppercase tracking-widest text-brand-sage mt-2">Days</div>
+                    </div>
+                    <div class="countdown-box rounded-xl p-4 md:p-6 w-16 md:w-24">
+                        <div id="hours" class="font-display font-bold text-3xl md:text-4xl text-brand-charcoal">00</div>
+                        <div data-i18n="hours" class="font-sans text-[10px] font-bold uppercase tracking-widest text-brand-sage mt-2">Hours</div>
+                    </div>
+                    <div class="countdown-box rounded-xl p-4 md:p-6 w-16 md:w-24">
+                        <div id="minutes" class="font-display font-bold text-3xl md:text-4xl text-brand-charcoal">00</div>
+                        <div data-i18n="minutes" class="font-sans text-[10px] font-bold uppercase tracking-widest text-brand-sage mt-2">Mins</div>
+                    </div>
+                    <div class="countdown-box rounded-xl p-4 md:p-6 w-16 md:w-24">
+                        <div id="seconds" class="font-display font-bold text-3xl md:text-4xl text-brand-charcoal">00</div>
+                        <div data-i18n="seconds" class="font-sans text-[10px] font-bold uppercase tracking-widest text-brand-sage mt-2">Secs</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Download Button Container -->
+            <div class="w-full flex flex-col items-center mt-4">
+                <p data-i18n="footer_thanks" class="font-sans text-xs font-bold uppercase tracking-widest text-brand-sage mb-6">We can't wait to celebrate with you</p>
+                
+                <a href="public/invitation-pdf.pdf" download="Siva_Lavanya_Wedding_Invitation.pdf" class="inline-flex items-center gap-3 bg-brand-charcoal hover:bg-brand-gold text-white font-sans text-sm font-bold uppercase tracking-[0.1em] px-8 py-4 rounded-full transition-all duration-300 shadow-lg hover:-translate-y-1">
+                    <i data-lucide="download" class="w-5 h-5"></i>
+                    <span data-i18n="download_btn">Download Invitation</span>
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Exact Location Map Section (at the very end) -->
+    <section id="location" class="py-16 md:py-20 bg-white relative border-t border-brand-rose/20">
+        <div class="container mx-auto px-6 max-w-5xl">
+            <div class="text-center mb-10 md:mb-12 gsap-fade-up">
+                <span data-i18n="map_subtitle" class="font-sans text-xs font-semibold uppercase tracking-[0.3em] text-brand-sage">Venue</span>
+                <h2 data-i18n="map_title" class="font-display font-bold text-4xl md:text-5xl text-brand-charcoal mt-2">Getting There</h2>
+                <div class="w-16 h-[2px] bg-brand-gold mx-auto mt-4"></div>
+            </div>
+            
+            <div class="w-full rounded-2xl overflow-hidden shadow-2xl border-[6px] border-brand-blush gsap-fade-up relative z-10">
+                <!-- Exact KSR Function Hall Location via Map Embed ID -->
+                <iframe 
+                    src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d15290.413809623662!2d81.6575191!3d16.5103649!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3a37cf1f10ece3fd%3A0xbf54336518050496!2sKSR%20Function%20hall!5e0!3m2!1sen!2sin!4v1714478000000!5m2!1sen!2sin" 
+                    width="100%" 
+                    height="450" 
+                    style="border:0;" 
+                    allowfullscreen="" 
+                    loading="lazy" 
+                    referrerpolicy="no-referrer-when-downgrade">
+                </iframe>
+            </div>
+        </div>
+    </section>
+
+    <script>
+        // Initialize Lucide Icons
+        lucide.createIcons();
+
+        // Multi-language Dictionary
+        const i18n = {
+            en: {
+                loading: "Loading...",
+                hero_subtitle: "Together with their families",
+                groom_name_hero: "Siva Krishna",
+                bride_name_hero: "Lavanya",
+                hero_invite: "Invite you to share in the joy of the beginning of their new life together.",
+                countdown_title: "Countdown to Forever",
+                days: "Days", hours: "Hours", minutes: "Mins", seconds: "Secs",
+                quote: "\"Janakyah Kamalamalanjali Puteyah Padmaragayithah<br>Nyastha Ramava Masthakecha Nilavathkunda Thranunayithah!<br>Srastha Shyamala Kayakanthi Kalithah Ya Indra Neelayithah<br>Mukthastha Shubhadha Bhavanthu Bhavatham Srirama Vivaahikah!!\"",
+                us_subtitle: "About Us",
+                us_title: "The Happy Couple",
+                groom_label: "The Groom",
+                bride_label: "The Bride",
+                groom_parents: "Son of Konathala Srinivasarao & Lakshmi Sarada Devi",
+                bride_parents: "Daughter of Peela Lakshmi Ganapathi & Lakshmi",
+                groom_desc: "A kind-hearted soul with a passion for life. He can't wait to start this new beautiful chapter.",
+                bride_desc: "Brings joy to everyone around her and has found her perfect match in Siva.",
+                events_subtitle: "Celebrations",
+                events_title: "Wedding Events",
+                secret_date: "🔒 To Be Revealed...",
+                event_1_name: "Groom Making",
+                event_1_date: "November 22, 2026",
+                event_1_desc: "Join us as we celebrate the groom and begin the journey towards forever.",
+                event_2_name: "Wedding Ceremony",
+                event_2_date: "November 25, 2026, 09:33 PM",
+                event_2_desc: "Venue: KSR Function Hall, Paddala Venkamma Talli Temple, Nauduru Center, Veeravasaram Mandal",
+                event_3_name: "Reception",
+                event_3_time: "6 PM onwards",
+                event_3_desc: "Venue: KSR Function Hall, Paddala Venkamma Talli Temple, Nauduru Center, Veeravasaram Mandal",
+                gallery_subtitle: "Glimpses",
+                gallery_title: "Our Memories",
+                reveal_btn: "Reveal the Date!",
+                reveal_text_pre: "We are getting married on",
+                map_subtitle: "Venue",
+                map_title: "Getting There",
+                closing_quote: "\"We request your presence to shower your blessings and akshinthalu on the newly wedded couple during these auspicious moments.\"",
+                footer_thanks: "We can't wait to celebrate with you",
+                download_btn: "Download Invitation"
+            },
+            te: {
+                loading: "లోడ్ అవుతోంది...",
+                hero_subtitle: "వారి కుటుంబ సమేతంగా",
+                groom_name_hero: "శివ కృష్ణ",
+                bride_name_hero: "లావణ్య",
+                hero_invite: "వారి కొత్త జీవితం ప్రారంభోత్సవ ఆనందంలో పాలుపంచుకోవాలని మిమ్మల్ని ప్రేమతో ఆహ్వానిస్తున్నారు.",
+                countdown_title: "వేడుకకు సమయం",
+                days: "రోజులు", hours: "గంటలు", minutes: "నిమిషాలు", seconds: "సెకన్లు",
+                quote: "\"జానక్యాః కమలామలాంజలి పుటేయాః పద్మరాగాయితాః<br>న్యస్తా రామవ మస్తకేచ నిలవత్కుంద త్రనూనాయితాః!<br>స్రస్తా శ్యామల కాయకాంతి కలితాః యా ఇంద్ర నీలాయితాః<br>ముక్తాస్తా శుభదా భవంతు భవతాం శ్రీరామ వైవాహికాః!!\"",
+                us_subtitle: "మా గురించి",
+                us_title: "వధూవరులు",
+                groom_label: "వరుడు",
+                bride_label: "వధువు",
+                groom_parents: "కొణతాల శ్రీనివాసరావు - లక్ష్మీ శారద దేవి దంపతుల కుమారుడు",
+                bride_parents: "పీలా లక్ష్మీ గణపతి - లక్ష్మి దంపతుల కుమార్తె",
+                groom_desc: "మంచి మనసున్న వ్యక్తి, జీవితం పట్ల మక్కువ గలవాడు. కొత్త జీవితం ప్రారంభించడానికి సిద్ధంగా ఉన్నాడు.",
+                bride_desc: "తన చుట్టూ ఉన్న ప్రతి ఒక్కరికీ ఆనందాన్ని పంచుతుంది, శివలో తన పరిపూర్ణ జోడీని కనుగొంది.",
+                events_subtitle: "వేడుకలు",
+                events_title: "వివాహ కార్యక్రమాలు",
+                secret_date: "🔒 త్వరలో ప్రకటించబడుతుంది...",
+                event_1_name: "వరుడి వేడుక",
+                event_1_date: "నవంబర్ 22, 2026",
+                event_1_desc: "వరుడి వేడుకలో పాల్గొని, నూతన జీవిత ప్రయాణాన్ని ప్రారంభించే ఈ శుభ సందర్భానికి మిమ్మల్ని ఆహ్వానిస్తున్నాము.",
+                event_2_name: "వివాహ మహోత్సవం",
+                event_2_date: "నవంబర్ 25, 2026, రాత్రి 09:33 ని॥లకు",
+                event_2_desc: "కళ్యాణ వేదిక: KSR ఫంక్షన్ హాల్ పద్దాల వెంకమ్మ తల్లి టెంపుల్, నౌడూరు సెంటర్, వీరవాసరం మండలం",
+                event_3_name: "రిసెప్షన్",
+                event_3_time: "సాయంత్రం 6 గంటల నుండి",
+                event_3_desc: "వేదిక: KSR ఫంక్షన్ హాల్, పద్దాల వెంకమ్మ తల్లి టెంపుల్, నౌడూరు సెంటర్, వీరవాసరం మండలం",
+                gallery_subtitle: "జ్ఞాపకాలు",
+                gallery_title: "మా మధుర క్షణాలు",
+                reveal_btn: "తేదీని చూడండి!",
+                reveal_text_pre: "మా వివాహ తేదీ",
+                map_subtitle: "వేదిక",
+                map_title: "కల్యాణ మండపం",
+                closing_quote: "\"వేద మంత్రాలతో పచ్చని పందిరిలో, ధర్మేచ, అర్దేచ, కామేచ, మోక్షేచ, నాతిచరామి అని పలికే శుభ ఘడియలలో మీ హృదయాక్షింతలు నూతన వధూవరులపై వేసి ఆశీర్వదించ కోరుచున్నాము.\"",
+                footer_thanks: "మీ రాకకై ఎదురుచూస్తున్నాము",
+                download_btn: "శుభపత్రిక డౌన్‌లోడ్ చేయండి"
+            }
+        };
+
+        let currentLang = 'en';
+
+        // Language Switcher Function
+        function toggleLanguage() {
+            currentLang = currentLang === 'en' ? 'te' : 'en';
+            
+            // Toggle body class for font adjustments if needed
+            if(currentLang === 'te') {
+                document.body.classList.add('font-telugu');
+            } else {
+                document.body.classList.remove('font-telugu');
+            }
+
+            // Update text elements
+            document.querySelectorAll('[data-i18n]').forEach(el => {
+                const key = el.getAttribute('data-i18n');
+                if (i18n[currentLang][key]) {
+                    el.innerHTML = i18n[currentLang][key];
+                    gsap.fromTo(el, { opacity: 0.4 }, { opacity: 1, duration: 0.3, overwrite: true });
+                }
+            });
+            
+            // Update button text
+            document.getElementById('lang-text').innerText = currentLang === 'en' ? 'తెలుగు' : 'English';
+        }
+
+        // Safe Initialization
+        document.addEventListener('DOMContentLoaded', () => {
+            const loader = document.getElementById('loader');
+            
+            // Sync all texts on initial load to avoid mismatch bug
+            document.querySelectorAll('[data-i18n]').forEach(el => {
+                const key = el.getAttribute('data-i18n');
+                if (i18n[currentLang][key]) {
+                    el.innerHTML = i18n[currentLang][key];
+                }
+            });
+
+            if(loader) {
+                setTimeout(() => {
+                    loader.style.opacity = '0';
+                    setTimeout(() => {
+                        loader.style.display = 'none';
+                        initAnimations();
+                        initCountdown();
+                    }, 500);
+                }, 1000); 
+            } else {
+                 initAnimations();
+                 initCountdown();
+            }
+        });
+
+        // Initialize GSAP Animations
+        function initAnimations() {
+            if (typeof gsap === 'undefined' || typeof ScrollTrigger === 'undefined') {
+                setTimeout(initAnimations, 100);
+                return;
+            }
+
+            gsap.registerPlugin(ScrollTrigger);
+
+            // Hero Section Animation
+            gsap.fromTo(".gsap-hero-elem", 
+                { y: 40, opacity: 0 },
+                { y: 0, opacity: 1, duration: 1.2, stagger: 0.2, ease: "power3.out" }
+            );
+
+            // Generic Fade Up
+            gsap.utils.toArray('.gsap-fade-up').forEach(elem => {
+                gsap.fromTo(elem,
+                    { y: 50, opacity: 0 },
+                    { 
+                        y: 0, opacity: 1, 
+                        duration: 1, 
+                        ease: "power2.out",
+                        scrollTrigger: { trigger: elem, start: "top 85%" }
+                    }
+                );
+            });
+
+            // Couple Slide In
+            gsap.fromTo(".gsap-slide-right",
+                { x: -60, opacity: 0 },
+                { 
+                    x: 0, opacity: 1, duration: 1.2, ease: "power2.out",
+                    scrollTrigger: { trigger: "#couple", start: "top 75%" }
+                }
+            );
+            
+            gsap.fromTo(".gsap-slide-left",
+                { x: 60, opacity: 0 },
+                { 
+                    x: 0, opacity: 1, duration: 1.2, ease: "power2.out",
+                    scrollTrigger: { trigger: "#couple", start: "top 75%" }
+                }
+            );
+
+            // Event Cards
+            gsap.fromTo(".gsap-event-card",
+                { y: 60, opacity: 0 },
+                { 
+                    y: 0, opacity: 1, duration: 0.8, stagger: 0.3, ease: "back.out(1.2)",
+                    scrollTrigger: { trigger: "#events", start: "top 75%" }
+                }
+            );
+
+            // Gallery items
+            gsap.fromTo(".gsap-gallery-item",
+                { scale: 0.9, opacity: 0 },
+                { 
+                    scale: 1, opacity: 1, duration: 0.8, stagger: 0.2, ease: "power2.out",
+                    scrollTrigger: { trigger: "#gallery", start: "top 80%" }
+                }
+            );
+        }
+
+        // Countdown Logic (Target: Nov 25, 2026 21:33)
+        function initCountdown() {
+            const targetDate = new Date("November 25, 2026 21:33:00").getTime();
+            
+            const daysEl = document.getElementById('days');
+            const hoursEl = document.getElementById('hours');
+            const minutesEl = document.getElementById('minutes');
+            const secondsEl = document.getElementById('seconds');
+
+            if(!daysEl) return; 
+
+            const updateCountdown = setInterval(function() {
+                const now = new Date().getTime();
+                const distance = targetDate - now;
+
+                if (distance < 0) {
+                    clearInterval(updateCountdown);
+                    document.getElementById("countdown-container").innerHTML = "<div class='text-brand-gold font-serif font-bold italic text-3xl'>The Day is Here!</div>";
+                    return;
+                }
+
+                const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+                const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+                const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+                daysEl.innerText = days < 10 ? "0" + days : days;
+                hoursEl.innerText = hours < 10 ? "0" + hours : hours;
+                minutesEl.innerText = minutes < 10 ? "0" + minutes : minutes;
+                secondsEl.innerText = seconds < 10 ? "0" + seconds : seconds;
+            }, 1000);
+        }
+
+        // Surprise Date Reveal with Fireworks
+        function revealDate() {
+            const btn = document.getElementById('reveal-btn');
+            const container = document.getElementById('revealed-date-container');
+            const dateText = document.getElementById('revealed-date');
+            const secretDateElem = document.getElementById('secret-wedding-date');
+            
+            // Update the event card date to show the real date
+            if (secretDateElem) {
+                secretDateElem.setAttribute('data-i18n', 'event_2_date');
+                secretDateElem.innerText = i18n[currentLang]['event_2_date'];
+            }
+            
+            // Hide button, show text container
+            btn.style.display = 'none';
+            container.classList.remove('hidden');
+            container.classList.add('flex');
+            
+            // GSAP pop animation for the date
+            gsap.fromTo(dateText, 
+                { scale: 0, opacity: 0, rotation: -10 }, 
+                { scale: 1, opacity: 1, rotation: 0, duration: 1.5, ease: "elastic.out(1, 0.4)" }
+            );
+
+            // Trigger Canvas Confetti / Sparkles
+            if (typeof confetti !== 'undefined') {
+                var duration = 4 * 1000;
+                var animationEnd = Date.now() + duration;
+                var defaults = { startVelocity: 40, spread: 360, ticks: 100, zIndex: 0, colors: ['#C5A880', '#ffffff', '#E6C9C9'] };
+
+                function randomInRange(min, max) {
+                  return Math.random() * (max - min) + min;
+                }
+
+                var interval = setInterval(function() {
+                  var timeLeft = animationEnd - Date.now();
+                  if (timeLeft <= 0) return clearInterval(interval);
+                  
+                  var particleCount = 60 * (timeLeft / duration);
+                  
+                  // Explode from two sides
+                  confetti(Object.assign({}, defaults, { 
+                      particleCount, origin: { x: randomInRange(0.1, 0.3), y: Math.random() - 0.2 }
+                  }));
+                  confetti(Object.assign({}, defaults, { 
+                      particleCount, origin: { x: randomInRange(0.7, 0.9), y: Math.random() - 0.2 }
+                  }));
+                }, 250);
+            }
+        }
+    </script>
+</body>
+</html>
